@@ -16,7 +16,10 @@ namespace GoodBot
         static void Main(string[] args)
         {
             InitConfiguration();
-            new Program().RunBot().GetAwaiter().GetResult();
+            new Program()
+                .RunBot()
+                .GetAwaiter()
+                .GetResult();
         }
 
         private static void InitConfiguration()
@@ -49,9 +52,9 @@ namespace GoodBot
             await Task.Delay(-1);
         }
 
-        private Task Log(LogMessage arg)
+        private Task Log(LogMessage message)
         {
-            Console.WriteLine(arg);
+            Console.WriteLine(message);
             return Task.CompletedTask;
         }
 
@@ -61,13 +64,13 @@ namespace GoodBot
             await commands.AddModulesAsync(Assembly.GetEntryAssembly());
         }
 
-        private async Task HandleCommand(SocketMessage arg)
+        private async Task HandleCommand(SocketMessage message)
         {
-            var message = arg as SocketUserMessage;
-            if (message is null || message.Author.IsBot) return;
+            var userMessage = message as SocketUserMessage;
+            if (userMessage is null || userMessage.Author.IsBot) return;
             int argPos = 0;
-            if(message.HasStringPrefix("!", ref argPos) || message.HasMentionPrefix(client.CurrentUser, ref argPos)) {
-                var context = new SocketCommandContext(client, message);
+            if(userMessage.HasStringPrefix("!", ref argPos) || userMessage.HasMentionPrefix(client.CurrentUser, ref argPos)) {
+                var context = new SocketCommandContext(client, userMessage);
                 var result = await commands.ExecuteAsync(context, argPos, services);
                 if (!result.IsSuccess) {
                     Console.WriteLine(result.ErrorReason);
