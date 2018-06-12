@@ -66,7 +66,7 @@ namespace GoodBot
             var message = arg as SocketUserMessage;
             if (message is null || message.Author.IsBot) return;
             int argPos = 0;
-            if(message.HasStringPrefix("tnt!", ref argPos) || message.HasMentionPrefix(client.CurrentUser, ref argPos)) {
+            if(message.HasStringPrefix("!", ref argPos) || message.HasMentionPrefix(client.CurrentUser, ref argPos)) {
                 var context = new SocketCommandContext(client, message);
                 var result = await commands.ExecuteAsync(context, argPos, services);
                 if (!result.IsSuccess) {
